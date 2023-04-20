@@ -19,7 +19,7 @@ RUN apt-get update -y -q && apt-get install -y -q \
   llvm \
   lld \
   pkg-config \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
@@ -66,27 +66,32 @@ FROM ubuntu:20.04 AS prod
 
 # We don't persist this env var in production image as we don't have the source files
 ARG SOURCE_PATH="/root/libra"
+ARG OL_BINS_PATH="/opt/0L"
 
 # Add 0L binaries to PATH
-ENV PATH="${SOURCE_PATH}/target/release:${PATH}"
+ENV PATH="${OL_BINS_PATH}:${PATH}"
 
 # Install system prerequisites
 RUN apt-get update && apt-get install -y \
   curl \
   libssl1.1 \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-
+ARG USERNAME="0loperator"
 # Copy binaries from builder
-COPY --from=builder [ \
-  "${SOURCE_PATH}/target/release/tower", \
-  "${SOURCE_PATH}/target/release/diem-node", \
-  "${SOURCE_PATH}/target/release/db-restore", \
-  "${SOURCE_PATH}/target/release/db-backup", \
-  "${SOURCE_PATH}/target/release/db-backup-verify", \
-  "${SOURCE_PATH}/target/release/ol", \
-  "${SOURCE_PATH}/target/release/txs", \
-  "${SOURCE_PATH}/target/release/onboard", \
-  "${SOURCE_PATH}/target/release/" \
-]
+COPY --link --from=builder "${SOURCE_PATH}/target/release/tower" "${OL_BINS_PATH}/tower"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/diem-node" "${OL_BINS_PATH}/diem-node"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/db-restore" "${OL_BINS_PATH}/db-restore"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/db-backup" "${OL_BINS_PATH}/db-backup"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/db-backup-verify" "${OL_BINS_PATH}/db-backup-verify"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/ol" "${OL_BINS_PATH}/ol"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/txs" "${OL_BINS_PATH}/txs"
+COPY --link --from=builder "${SOURCE_PATH}/target/release/onboard" "${OL_BINS_PATH}/onboard"
+RUN rm -rf /root
 
-WORKDIR /root/.0L
+RUN groupadd --gid 9999 "${USERNAME}" \
+  && useradd --home-dir "/home/${USERNAME}" --create-home \
+  --uid 9999 --gid 9999 --shell /bin/bash --skel /dev/null "${USERNAME}" \
+  && chown --recursive "${USERNAME}" "${OL_BINS_PATH}"
+
+USER "${USERNAME}"
+WORKDIR "/home/${USERNAME}"
