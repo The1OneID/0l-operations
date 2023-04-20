@@ -2,8 +2,8 @@
 x-defaults: &defaults
   image: "${OL_IMAGE}"
   restart: "on-failure"
-#  network_mode: host  # Fixme (nourspace): required to detect node processes?
-#  pid: host           # Fixme (nourspace): required to detect node processes?
+  network_mode: host  # Fixme (nourspace): required to detect node processes?
+  pid: host           # Fixme (nourspace): required to detect node processes?
   volumes:
     - "node_data:/home/0loperator/.0L"
     - "epoch_archive:/home/0loperator/epoch-archive"
