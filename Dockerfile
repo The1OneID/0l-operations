@@ -66,7 +66,7 @@ FROM ubuntu:20.04 AS prod
 
 # We don't persist this env var in production image as we don't have the source files
 ARG SOURCE_PATH="/root/libra"
-ARG OL_BINS_PATH="/opt/0L"
+ARG OL_BINS_PATH="/opt/libra"
 
 # Add 0L binaries to PATH
 ENV PATH="${OL_BINS_PATH}:${PATH}"
