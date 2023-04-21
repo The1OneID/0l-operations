@@ -2,7 +2,6 @@
 x-defaults: &defaults
   image: "${OL_IMAGE}"
   restart: "on-failure"
-  network_mode: host  # Fixme (nourspace): required to detect node processes?
   pid: host           # Fixme (nourspace): required to detect node processes?
   volumes:
     - "node_data:/home/0loperator/.0L"
@@ -38,6 +37,9 @@ services:
       - "6179:6179"
       - "6180:6180"
       - "8080:8080"
+      - "127.0.0.1:9100:9100" # prometheus
+      - "127.0.0.1:9101:9101" # prometheus
+      - "127.0.0.1:9102:9102" # prometheus
 
   tower:
     <<: *defaults
