@@ -2,7 +2,7 @@
 x-defaults: &defaults
   image: "${OL_IMAGE}"
   restart: "on-failure"
-  pid: host           # Fixme (nourspace): required to detect node processes?
+  pid: "container:0l-pid-namespace" # https://docs.docker.com/engine/reference/run/#pid-settings---pid
   volumes:
     - "node_data:/home/0loperator/.0L"
     - "epoch_archive:/home/0loperator/epoch-archive"
