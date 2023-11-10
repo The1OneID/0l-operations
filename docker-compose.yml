@@ -4,8 +4,8 @@ x-defaults: &defaults
   restart: "on-failure"
   pid: "container:0l-pid-namespace" # https://docs.docker.com/engine/reference/run/#pid-settings---pid
   volumes:
-    - "node_data:/home/0loperator/.0L"
-    - "epoch_archive:/home/0loperator/epoch-archive"
+    - "node_data:/home/0loperator/.libra"
+#    - "epoch_archive:/home/0loperator/epoch-archive"
   ulimits:
     nproc: 500000
     nofile: 500000
@@ -29,9 +29,10 @@ services:
     container_name: "0l-${OL_NODE_MODE}"
     command:
       [
-        "diem-node",
-        "--config",
-        "/home/0loperator/.0L/${OL_NODE_MODE}.node.yaml"
+        "libra",
+        "node",
+        "--config-path",
+        "~/.libra/${OL_NODE_MODE}.node.yaml"
       ]
     ports:
       - "6179:6179"
@@ -44,17 +45,11 @@ services:
   tower:
     <<: *defaults
     container_name: 0l-tower
-    command: "tower ${OL_TOWER_OPERATOR} ${OL_TOWER_USE_FIRST_UPSTREAM} ${OL_TOWER_VERBOSE} start"
+    command: "libra tower ${OL_TOWER_OPERATOR} ${OL_TOWER_USE_FIRST_UPSTREAM} ${OL_TOWER_VERBOSE} start"
     environment:
       NODE_ENV: "prod"
       TEST: "${OL_TOWER_TEST-n}"
 
-  monitor:
-    <<: *defaults
-    container_name: 0l-monitor
-    command: [ "ol", "serve" ]
-    ports:
-      - "3030:3030"
 
   ########## Utility services #############
 
