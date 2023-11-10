@@ -32,15 +32,16 @@ services:
         "libra",
         "node",
         "--config-path",
-        "~/.libra/${OL_NODE_MODE}.yaml"
+        "/home/0loperator/.libra/validator.yaml"
       ]
     ports:
-      - "6179:6179"
       - "6180:6180"
+      - "6181:6181"
+      - "6182:6182"
       - "8080:8080"
-      - "127.0.0.1:9100:9100" # prometheus
-      - "127.0.0.1:9101:9101" # prometheus
-      - "127.0.0.1:9102:9102" # prometheus
+#      - "127.0.0.1:9100:9100" # prometheus
+#      - "127.0.0.1:9101:9101" # prometheus
+#      - "127.0.0.1:9102:9102" # prometheus
 
   tower:
     <<: *defaults
