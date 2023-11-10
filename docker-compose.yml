@@ -32,7 +32,7 @@ services:
         "libra",
         "node",
         "--config-path",
-        "~/.libra/${OL_NODE_MODE}.node.yaml"
+        "~/.libra/${OL_NODE_MODE}.yaml"
       ]
     ports:
       - "6179:6179"
