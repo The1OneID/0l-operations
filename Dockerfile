@@ -37,7 +37,7 @@ FROM toolchain as source
 
 # Clone given release tag or branch of this repo
 ARG REPO=https://github.com/0LNetworkCommunity/libra-framework.git
-ARG BRANCH=release-6.9.0-rc.8
+ARG BRANCH=release-6.9.0-rc.9
 
 # Add target binaries to PATH
 ENV SOURCE_PATH="/root/libra-framework" \
