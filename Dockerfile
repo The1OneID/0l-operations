@@ -68,7 +68,7 @@ RUN RUSTC_WRAPPER=sccache cargo build --release \
 FROM debian:bookworm-slim AS prod
 ARG UID=1000
 ARG GID=1000
-ARG USERNAME="ubuntu"
+ARG USERNAME="0loperator"
 
 # We don't persist this env var in production image as we don't have the source files
 ARG SOURCE_PATH="/root/libra-framework"
