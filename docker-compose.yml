@@ -12,6 +12,11 @@ x-defaults: &defaults
   entrypoint: [ "" ]
   env_file:
     - "./.env"
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "10"
 
 x-util-defaults: &util-defaults
   <<: *defaults
