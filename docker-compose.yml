@@ -40,21 +40,12 @@ services:
         "/home/${DOCKER_USERNAME}/.libra/${OL_NODE_MODE}.yaml"
       ]
     ports:
-      - "6180:6180"
-      - "6181:6181"
-      - "6182:6182"
       - "8080:8080"
-      - "127.0.0.1:9100:9100" # prometheus
-      - "127.0.0.1:9101:9101" # prometheus
-      - "127.0.0.1:9102:9102" # prometheus
-
-  tower:
-    <<: *defaults
-    container_name: 0l-tower
-    command: "libra tower ${OL_TOWER_OPERATOR} ${OL_TOWER_USE_FIRST_UPSTREAM} ${OL_TOWER_VERBOSE} start"
-    environment:
-      NODE_ENV: "prod"
-      TEST: "${OL_TOWER_TEST-n}"
+      - "6180:6180"
+      - "127.0.0.1:6181:6181"
+  #      - "127.0.0.1:9100:9100" # prometheus
+  #      - "127.0.0.1:9101:9101" # prometheus
+  #      - "127.0.0.1:9102:9102" # prometheus
 
 
   ########## Utility services #############

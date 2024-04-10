@@ -37,7 +37,7 @@ FROM toolchain as source
 
 # Clone given release tag or branch of this repo
 ARG REPO=https://github.com/0LNetworkCommunity/libra-framework.git
-ARG BRANCH=release-6.9.0-rc.9
+ARG BRANCH=release-7.0.0
 
 # Add target binaries to PATH
 ENV SOURCE_PATH="/root/libra-framework" \
@@ -57,10 +57,7 @@ FROM source as builder
 
 # Build 0L binaries
 RUN RUSTC_WRAPPER=sccache cargo build --release \
-    -p libra \
-    -p libra-genesis-tools \
-    -p libra-txs \
-    -p diem-db-tool
+    -p libra
 
 
 ##########   Production image     ##########
@@ -91,9 +88,6 @@ INSTALL_PROD_SYSTEM_PREREQUISITES
 
 COPY --from=builder [ \
     "${SOURCE_PATH}/target/release/libra", \
-    "${SOURCE_PATH}/target/release/libra-genesis-tools", \
-    "${SOURCE_PATH}/target/release/libra-txs", \
-    "${SOURCE_PATH}/target/release/diem-db-tool", \
     "${OL_BINS_PATH}/" \
 ]
 RUN rm -rf /root
